@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>lilguymaker · carryables</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+  <div id="app">
+
+    <!-- left sidebar -->
+    <aside class="sidebar-left">
+      <div class="sidebar-header">
+        <div class="logo">lilguymaker</div>
+        <div class="logo-sub">carryables</div>
+      </div>
+
+      <!-- carryable type selector -->
+      <div class="sidebar-section">
+        <div class="section-label">base</div>
+        <div class="carryable-list" id="carryable-list"></div>
+      </div>
+
+      <!-- search -->
+      <div class="sidebar-section">
+        <div class="section-label">search pieces</div>
+        <div class="search-wrap">
+          <input type="text" id="search-input" placeholder="star, jump ring, tassel..." class="search-input">
+        </div>
+      </div>
+
+      <!-- category browser -->
+      <div class="sidebar-section flex-1">
+        <div class="section-label">categories</div>
+        <div class="cat-tabs" id="cat-tabs"></div>
+        <div class="asset-grid" id="asset-grid"></div>
+      </div>
+
+      <!-- presets / favorites -->
+      <div class="sidebar-section">
+        <div class="section-label">saved presets</div>
+        <div class="presets" id="presets">
+          <div class="empty-msg">no presets yet — build something!</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- center canvas -->
+    <main class="canvas-area">
+      <div class="canvas-toolbar">
+        <div class="toolbar-group">
+          <button class="tool-btn active" id="tool-select" title="select">↖</button>
+          <button class="tool-btn" id="tool-pan" title="pan">✥</button>
+          <button class="tool-btn" id="tool-rotate" title="rotate">↻</button>
+        </div>
+        <div class="toolbar-group">
+          <button class="tool-btn" onclick="resetView()" title="reset view">⊡</button>
+          <select class="zoom-select" id="zoom-select">
+            <option value="0.5">50%</option>
+            <option value="0.75">75%</option>
+            <option value="1" selected>100%</option>
+            <option value="1.5">150%</option>
+            <option value="2">200%</option>
+          </select>
+        </div>
+        <div class="toolbar-group">
+          <button class="view-btn active" data-view="front">front</button>
+          <button class="view-btn" data-view="hanging">hanging</button>
+          <button class="view-btn" data-view="tabletop">tabletop</button>
+        </div>
+        <div class="toolbar-spacer"></div>
+        <div class="toolbar-group">
+          <button class="tool-btn" onclick="clearCanvas()" title="clear">🗑</button>
+          <button class="btn-export" onclick="openExport()">export ↗</button>
+        </div>
+      </div>
+
+      <div class="canvas-wrap" id="canvas-wrap">
+        <div class="canvas-bg" id="canvas-bg">
+          <svg id="main-canvas" xmlns="http://www.w3.org/2000/svg" width="800" height="640">
+            <!-- grid -->
+            <defs>
+              <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#E4E2DC" stroke-width="0.5"/>
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#grid)"/>
+            <g id="canvas-root"></g>
+          </svg>
+        </div>
+        <div class="canvas-empty" id="canvas-empty">
+          <div class="empty-icon">🎀</div>
+          <div class="empty-title">start building</div>
+          <div class="empty-desc">choose a base carryable from the left sidebar,<br>then add pieces from the asset browser</div>
+        </div>
+      </div>
+    </main>
+
+    <!-- right sidebar -->
+    <aside class="sidebar-right">
+      <div class="sidebar-header">
+        <div class="section-label">properties</div>
+      </div>
+      <div id="properties-panel">
+        <div class="props-empty">select a piece to edit its properties</div>
+      </div>
+    </aside>
+
+  </div>
+
+  <!-- export modal -->
+  <div class="modal-backdrop" id="export-modal" style="display:none">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title">export</div>
+        <button class="modal-close" onclick="closeExport()">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="export-options">
+          <button class="export-btn" onclick="exportAs('png')">png</button>
+          <button class="export-btn" onclick="exportAs('transparent-png')">transparent png</button>
+          <button class="export-btn" onclick="exportAs('svg')">svg</button>
+          <button class="export-btn primary" onclick="exportAs('figma')">add to figma frame ↗</button>
+        </div>
+        <div class="export-note">figma export requires the plugin to be open</div>
+      </div>
+    </div>
+  </div>
+
+  <script src="src/data.js"></script>
+  <script src="src/canvas.js"></script>
+  <script src="src/app.js"></script>
+</body>
+</html>

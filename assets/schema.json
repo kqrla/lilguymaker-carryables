@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "lilguymaker asset schema",
+  "description": "data model for all carryable base objects and modular pieces",
+  "definitions": {
+    "connectionPoint": {
+      "type": "object",
+      "required": ["id", "x", "y", "accepts"],
+      "properties": {
+        "id": { "type": "string", "description": "unique id for this connection point on the asset" },
+        "x": { "type": "number", "description": "x position as fraction of asset width (0-1)" },
+        "y": { "type": "number", "description": "y position as fraction of asset height (0-1)" },
+        "accepts": { "type": "array", "items": { "type": "string" }, "description": "connection types this point accepts" },
+        "label": { "type": "string", "description": "human readable name e.g. 'top ring', 'bottom loop'" }
+      }
+    },
+    "asset": {
+      "type": "object",
+      "required": ["id", "category", "label", "emoji", "connectionPoints"],
+      "properties": {
+        "id": { "type": "string" },
+        "category": { "type": "string", "enum": ["carryable", "charm", "hardware", "soft", "bead", "tag"] },
+        "label": { "type": "string" },
+        "emoji": { "type": "string" },
+        "svg": { "type": "string", "description": "inline svg string for the asset" },
+        "width": { "type": "number", "description": "natural width in px" },
+        "height": { "type": "number", "description": "natural height in px" },
+        "connectionPoints": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/connectionPoint" }
+        },
+        "accepts": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "connection point types this asset can receive"
+        },
+        "provides": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "connection point types this asset exposes to other assets"
+        },
+        "defaultMaterial": { "type": "string", "enum": ["matte", "glossy", "metallic", "translucent", "fabric", "leather"] },
+        "defaultColor": { "type": "string", "description": "default hex color" }
+      }
+    }
+  },
+  "type": "object",
+  "properties": {
+    "version": { "type": "string" },
+    "carryables": { "type": "array", "items": { "$ref": "#/definitions/asset" } },
+    "pieces": { "type": "array", "items": { "$ref": "#/definitions/asset" } }
+  }
+}
